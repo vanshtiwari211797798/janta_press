@@ -1,0 +1,341 @@
+/* General styles */
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+}
+
+a{
+    text-decoration: none;
+}
+
+#nav {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #605CA8; 
+}
+
+#logo {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+#logout{
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #ffffff;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background-color 0.3s, color 0.3s;
+}
+
+#logout:hover {
+    background-color: rgb(223, 191, 191);
+    color: rgb(0, 0, 0);
+}
+
+
+
+#main {
+    display: flex;
+}
+
+/* Sidebar styles */
+
+#left-slider{
+    display: flex;
+}
+
+
+.sidebar {
+    color: rgb(0, 0, 0);
+    /* position: fixed; */
+    overflow: auto;
+    padding: 10px;
+    width: 200px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar a{
+    text-decoration: none;
+    color: #333;
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.w3-bar-item {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.w3-bar-item:hover {
+    background-color: #ece4e4;
+    cursor: pointer;
+}
+
+.w3-bar-item.w3-red {
+    background-color:  #ece4e4;
+}
+
+/* Tab content styles */
+/* Hide all tab contents by default */
+.tab-content {
+    display: none;
+}
+
+/* Show the active tab */
+.tab-content.active {
+    display: block;
+}
+
+/* Headings */
+h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+/* Additional styles */
+.w3-padding {
+    padding: 20px;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* .right-main */
+
+.right-main{
+display: flex;
+}
+
+
+/* Dashboard */
+
+/* #dashboard{
+        
+} */
+
+#content{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-gap: 20px;
+    padding: 20px; 
+}
+
+
+/* card-content */
+
+
+.card {
+    background-color: #a73e3e;
+    width: 250px;
+    height: 118px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    position: relative;
+}
+
+#card-content{
+    padding: 20px 10px ;
+    /* padding: 20px; */
+}
+
+.card h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.card a {
+    text-decoration: none;
+    color: #007bff;
+    width: 100%;
+    font-size: 1rem;
+    display: inline-block;
+    padding: 5px 10px;
+    text-align: center;
+    background-color: #ffffff;
+    transition: background-color 0.3s;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    position: absolute;
+    top: 76%;
+
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Specific Colors for Cards */
+.card.student {
+    background-color: #007bff;
+    color: white;
+}
+
+.card.staff {
+    background-color: #e83e8c;
+    color: white;
+}
+
+.card.holiday {
+    background-color: #dc3545;
+    color: white;
+}
+
+.card.leave {
+    background-color: #ffc107;
+    color: white;
+}
+
+.card.attendance {
+    background-color: #6610f2;
+    color: white;
+}
+
+
+.card.sms {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.card.school-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.card.credit-detail {
+    background-color: #e83e8c;
+    color: white;
+}
+
+#main-panel{
+    width: 1120px; 
+    background: hsl(0, 17%, 84%); 
+    padding:12px 3px; 
+    border-radius: 10px;
+}
+
+
+@media (max-width: 414px) {
+    #nav {
+        display: flex;
+        /* flex-direction: column; */
+        align-items: center;
+        text-align: center;
+        padding: 10px 20px;
+        width: 100%;
+    }
+
+    #logo {
+        margin: 0 auto; /* Center logo */
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+
+    #logout {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    #left-slider{
+        display: none;
+    }
+
+    .right-main{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        /* background-color: #6610f2; */
+    }
+
+    .Dashboard{
+        display: flex;
+        /* background-color: #333; */
+    }
+
+    #Dashboard h1{
+        font-size: 23px;
+        text-align: center;
+    }
+
+    #content{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        grid-gap: 10px;
+        /* padding: 10px; */
+    }
+
+    .card {
+        background-color: #a73e3e;
+        width: 148px;
+        height: 98px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+    #card-content{
+        /* padding: 20px 10px ; */
+        /* padding: 15px; */
+    }
+
+    .card h3{
+            font-size: 13px;
+    }
+
+    .card p{
+        font-size: 10px;
+    }
+
+    .card a{
+        /* position: relative;
+        background-color: #007bff; */
+        position: absolute;
+        top: 79%;
+    }
+
+    #main-panel {
+        width: 350px;
+        /* background-color: #007bff; */
+    }
+
+
+}
