@@ -190,7 +190,7 @@ $employeeData = mysqli_query($conn, $fetchEmployee);
             <div class="main-content">
                 <div style="padding: 10px; background-color: #f7f7f7; border-bottom: 1px solid #ddd; margin-bottom: 20px;">
                     <label for="schoolIdInput" style="margin-right: 10px; font-weight: bold;">School ID (Students):</label>
-                    <input type="text" id="schoolIdInput" placeholder="Enter School ID" style="padding: 5px; border: 1px solid #ccc; border-radius: 3px; margin-right: 20px;">
+                    <input type="text" id="schoolIdInput" placeholder="Enter Student School ID" style="padding: 5px; border: 1px solid #ccc; border-radius: 3px; margin-right: 20px;">
 
                     <label for="classSelect" style="margin-right: 10px; font-weight: bold;">Class:</label>
                     <select id="classSelect" style="padding: 5px; border: 1px solid #ccc; border-radius: 3px; margin-right: 20px;">
@@ -228,7 +228,7 @@ $employeeData = mysqli_query($conn, $fetchEmployee);
                 <!-- Staff id card search -->
                 <div style="padding: 10px; background-color: #f7f7f7; border-bottom: 1px solid #ddd; margin-bottom: 20px;">
                     <label for="schoolIdInput" style="margin-right: 10px; font-weight: bold;">School ID (Staff):</label>
-                    <input type="text" id="schoolIdInputEmp" placeholder="Enter School ID" style="padding: 5px; border: 1px solid #ccc; border-radius: 3px; margin-right: 20px;">
+                    <input type="text" id="schoolIdInputEmp" placeholder="Enter Staff School ID" style="padding: 5px; border: 1px solid #ccc; border-radius: 3px; margin-right: 20px;">
 
                     <button onclick="submitFormEmp()" style="padding: 7px 15px; border: none; border-radius: 3px; background-color: #007bff; color: white; font-weight: bold; cursor: pointer;">
                         Submit
@@ -336,7 +336,18 @@ $employeeData = mysqli_query($conn, $fetchEmployee);
 
                     window.location.href = `show_emp_id.php?school_id=${schoolId}`;
                 }
-                
+
+                function deleteStdTemplete() {
+                    const schoolId = document.getElementById("schoolIdStdDel").value;
+
+                    window.location.href = `deleteStdTemp.php?school_id=${schoolId}`;
+                }
+
+                function deleteEmpTemplete() {
+                    const schoolId = document.getElementById("schoolIdEmpDel").value;
+
+                    window.location.href = `deleteEmpTemp.php?school_id=${schoolId}`;
+                }
             </script>
             <!-- END MAIN CONTENT-->
             <!-- END PAGE CONTAINER-->
