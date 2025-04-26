@@ -147,6 +147,20 @@ include('phpqrcode/qrlib.php');
                 padding: 15px;
             }
         }
+
+
+        @media print {
+            .id-card {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .draggable {
+                position: absolute !important;
+                transform: none !important;
+                -webkit-transform: none !important;
+            }
+        }
     </style>
 
     <!-- html2canvas for converting HTML to image -->
@@ -274,7 +288,7 @@ include('phpqrcode/qrlib.php');
                     textDiv.textContent = content;
 
                     textDiv.style.position = 'absolute';
-                    textDiv.style.top = (element.position.top +0) + 'px';
+                    textDiv.style.top = (element.position.top + 0) + 'px';
                     textDiv.style.height = element.position.height + 'px';
                     textDiv.style.width = (element.position.width = 0) + 'px';
                     textDiv.style.fontFamily = element.styles['font-family'];
@@ -297,15 +311,16 @@ include('phpqrcode/qrlib.php');
                     const textWidth = tempSpan.offsetWidth;
                     document.body.removeChild(tempSpan);
 
-                    if (textWidth > element.position.width && element.styles['text-align'] === 'center') {
-                        // Apply transform only when text is larger and text-align is center
-                        textDiv.style.width = textWidth + 'px';
-                        textDiv.style.left = (element.position.left + element.position.width / 2) + 'px';
-                        textDiv.style.transform = 'translateX(-50%)';
-                    } else {
-                        // Keep default positioning
+                    // Replace the text width measurement code with this:
+                    if (element.styles['text-align'] === 'center') {
                         textDiv.style.width = element.position.width + 'px';
                         textDiv.style.left = element.position.left + 'px';
+                        textDiv.style.textAlign = 'center';
+                        textDiv.style.transform = 'none';
+                    } else {
+                        textDiv.style.width = element.position.width + 'px';
+                        textDiv.style.left = element.position.left + 'px';
+                        textDiv.style.transform = 'none';
                     }
 
                     cardDiv.appendChild(textDiv);
@@ -342,7 +357,7 @@ include('phpqrcode/qrlib.php');
                         }
                     } else if (imageCount === 2) {
                         // For second image, create QR code with student ID
-                        const qrCodeUrl = `qrcode.php?text=${student.id}&school_id=${student.school_id}&name=${student.name}&father=${student.father_name}&size=${element.position.width}x${element.position.height}`;
+                        const qrCodeUrl = `qrcode2.php?text=${student.id}&school_id=${student.school_id}&name=${student.emp_name}&father=${student.husband_or_father}&size=${element.position.width}x${element.position.height}`;
 
                         const qrContainer = document.createElement('div');
                         qrContainer.className = 'qr-container';
@@ -364,6 +379,33 @@ include('phpqrcode/qrlib.php');
 
                         qrContainer.appendChild(qrImg);
                         cardDiv.appendChild(qrContainer);
+                    } else if (imageCount === 3) {
+                        if (student.signature) {
+                            const imgSrc = `../admin/signature/${student.signature}`;
+
+                            const imgContainer = document.createElement('div');
+                            imgContainer.className = 'image-container';
+
+                            imgContainer.style.position = 'absolute';
+                            imgContainer.style.left = element.position.left + 'px';
+                            imgContainer.style.top = element.position.top + 2 + 'px';
+                            imgContainer.style.width = (element.position.width + 7) + 'px';
+                            imgContainer.style.height = element.position.height + 'px';
+                            imgContainer.style.overflow = 'hidden';
+                            imgContainer.style.borderRadius = '5px';
+
+                            const img = document.createElement('img');
+                            img.className = 'uploaded-image';
+                            img.src = imgSrc;
+
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.objectFit = 'cover';
+                            img.style.borderRadius = '5px';
+
+                            imgContainer.appendChild(img);
+                            cardDiv.appendChild(imgContainer);
+                        }
                     } else {
                         // For other images (if any)
                         const imgSrc = element.content;
@@ -471,6 +513,7 @@ include('phpqrcode/qrlib.php');
         }
         // working code of this
         async function downloadAllPDFs(side) {
+            await document.fonts.ready;
             const {
                 jsPDF
             } = window.jspdf;
@@ -555,7 +598,10 @@ include('phpqrcode/qrlib.php');
                 const canvas = await html2canvas(cards[i], {
                     scale: 3,
                     backgroundColor: null,
-                    useCORS: true
+                    useCORS: true,
+                    logging: false,
+                    letterRendering: true,
+                    allowTaint: true
                 });
 
                 const imgData = canvas.toDataURL('image/png');

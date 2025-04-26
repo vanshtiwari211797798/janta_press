@@ -65,7 +65,7 @@ $employeeData = mysqli_query($conn, $fetchEmployee);
             <div class="header-mobile__bar">
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
-                        <h2>JANTA PRESS</h2>
+                        <h2>JANTA S.PRESS</h2>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
                                 <span class="hamburger-inner"></span>
@@ -109,7 +109,7 @@ $employeeData = mysqli_query($conn, $fetchEmployee);
         <!-- MENU SIDEBAR-->
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                <h2>JANTA PRESS</h2>
+                <h2>JANTA S.PRESS</h2>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
@@ -156,7 +156,7 @@ $employeeData = mysqli_query($conn, $fetchEmployee);
                                             <img src="images/icon/avatar-01.jpg" alt="John Doe" />
                                         </div>
                                         <div class="content ">
-                                            <a class="js-acc-btn" href="#">john doe</a>
+                                        <a href="#">Janta S.press</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
@@ -167,13 +167,13 @@ $employeeData = mysqli_query($conn, $fetchEmployee);
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">john doe</a>
+                                                        <a href="#">Janta S.press</a>
                                                     </h5>
-                                                    <span class="email">johndoe@example.com</span>
+                                                    <!-- <span class="email">johndoe@example.com</span> -->
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
-                                                <a href="#">
+                                                <a href="logout.php">
                                                     <i class="zmdi zmdi-power"></i>Logout</a>
                                             </div>
                                         </div>

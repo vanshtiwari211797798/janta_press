@@ -106,74 +106,60 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                     alert('Name is required');
                 </script>
             ";
-        } elseif (empty($_POST['class'])) {
-            echo "
-            <script>
-                alert('class is required');
-            </script>
-        ";
-        } elseif (empty($_POST['gender'])) {
-            echo "
-            <script>
-                alert('Gender is required');
-            </script>
-        ";
-        } elseif (empty($_POST['father_name'])) {
-            echo "
-            <script>
-                alert('Father name is required');
-            </script>
-        ";
-        } else {
-            $uid = $_POST['uid'];
+        }  else {
+            $uid = mysqli_real_escape_string($conn, $_POST['uid']);
             $name = mysqli_real_escape_string($conn, $_POST['name']);
-            $class = $_POST['class'];
-            $section = $_POST['section'];
-            $category = $_POST['category'];
-            $gender = $_POST['gender'];
-            $dob = $_POST['dob'];
-            $roll_number = $_POST['roll_number'];
-            $father_name = $_POST['father_name'];
-            $father_contact = $_POST['father_contact'];
-            $mother_name = $_POST['mother_name'];
-            $mother_contact = $_POST['mother_contact'];
-            $blood_grp = $_POST['blood_grp'];
-            $city = $_POST['city'];
-            $address = $_POST['address'];
-            $photoName = $_FILES['photo']['name'];
-            $photo_tmp_name = $_FILES['photo']['tmp_name'];
-            $rf_id = $_POST['rf_id'];
-            $sms = $_POST['sms'];
-            $android_password = $_POST['android_password'];
-            $remark = $_POST['remark'];
+            $class = mysqli_real_escape_string($conn, $_POST['class']);
+            $section = mysqli_real_escape_string($conn, $_POST['section']);
+            $category = mysqli_real_escape_string($conn, $_POST['category']);
+            $gender = mysqli_real_escape_string($conn, $_POST['gender']);
+            $dob = mysqli_real_escape_string($conn, $_POST['dob']);
+            $roll_number = mysqli_real_escape_string($conn, $_POST['roll_number']);
+            $father_name = mysqli_real_escape_string($conn, $_POST['father_name']);
+            $father_contact = mysqli_real_escape_string($conn, $_POST['father_contact']);
+            $mother_name = mysqli_real_escape_string($conn, $_POST['mother_name']);
+            $mother_contact = mysqli_real_escape_string($conn, $_POST['mother_contact']);
+            $blood_grp = mysqli_real_escape_string($conn, $_POST['blood_grp']);
+            $city = mysqli_real_escape_string($conn, $_POST['city']);
+            $address = mysqli_real_escape_string($conn, $_POST['address']);
+            $rf_id = mysqli_real_escape_string($conn, $_POST['rf_id']);
+            $sms = mysqli_real_escape_string($conn, $_POST['sms']);
+            $android_password = mysqli_real_escape_string($conn, $_POST['android_password']);
+            $remark = mysqli_real_escape_string($conn, $_POST['remark']);
+
+            // Photo upload handling
             if (empty($_FILES['photo']['name'])) {
-                $fileName = $_POST['old_img'];
+                $fileName = mysqli_real_escape_string($conn, $_POST['old_img']);
             } else {
-                $fileName = $_FILES['photo']['name'];
+                $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                $fileName = time() . '_' . rand(1000, 9999) . '.' . $extension; // Unique file name
                 $file_Tmp_Name = $_FILES['photo']['tmp_name'];
+                move_uploaded_file($file_Tmp_Name, "Students_photo/$fileName");
             }
-            move_uploaded_file($photo_tmp_name, "Students_photo/$photoName");
+
+            // Update Query
             $sql = "UPDATE students SET 
-            name='$name',
-            class='$class',
-            section='$section',
-            category='$category',
-            gender='$gender',
-            dob='$dob',
-            roll_number='$roll_number',
-            father_name='$father_name',
-            father_contact='$father_contact',
-            mother_name='$mother_name',
-            mother_contact='$mother_contact',
-            blood_grp='$blood_grp',
-            city='$city',
-            address='$address',
-            photo='$fileName',
-            rf_id='$rf_id',
-            sms='$sms',
-            android_password='$android_password',
-            remark='$remark'
-        WHERE id='$uid'";
+                name='$name',
+                class='$class',
+                section='$section',
+                category='$category',
+                gender='$gender',
+                dob='$dob',
+                roll_number='$roll_number',
+                father_name='$father_name',
+                father_contact='$father_contact',
+                mother_name='$mother_name',
+                mother_contact='$mother_contact',
+                blood_grp='$blood_grp',
+                city='$city',
+                address='$address',
+                photo='$fileName',
+                rf_id='$rf_id',
+                sms='$sms',
+                android_password='$android_password',
+                remark='$remark'
+            WHERE id='$uid'";
+
             if (mysqli_query($conn, $sql)) {
                 echo "
                     <script>
@@ -181,6 +167,8 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                         window.location.href='view-student.php';
                     </script>
                 ";
+            } else {
+                echo "Error updating record: " . mysqli_error($conn);
             }
         }
     }

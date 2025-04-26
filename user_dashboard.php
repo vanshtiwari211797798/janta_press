@@ -17,7 +17,7 @@ if(!isset($_SESSION['school_id'])){
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Student Dashboard</title>
     <!-- Google Translate Script -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                     pageLanguage: 'en',
@@ -41,7 +41,7 @@ if(!isset($_SESSION['school_id'])){
             }
         }
         setTimeout(setNepaliLanguage, 3000);
-    </script>
+    </script> -->
     <style>
         /* Reset some default styles */
         * {
@@ -223,7 +223,7 @@ if(!isset($_SESSION['school_id'])){
 </head>
 
 <body>
-    <div id="google_translate_element"></div>
+    <!-- <div id="google_translate_element"></div> -->
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">

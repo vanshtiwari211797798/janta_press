@@ -147,6 +147,20 @@ include('phpqrcode/qrlib.php');
                 padding: 15px;
             }
         }
+
+
+        @media print {
+            .id-card {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .draggable {
+                position: absolute !important;
+                transform: none !important;
+                -webkit-transform: none !important;
+            }
+        }
     </style>
 
     <!-- html2canvas for converting HTML to image -->
@@ -299,15 +313,16 @@ include('phpqrcode/qrlib.php');
                     const textWidth = tempSpan.offsetWidth;
                     document.body.removeChild(tempSpan);
 
-                    if (textWidth > element.position.width && element.styles['text-align'] === 'center') {
-                        // Apply transform only when text is larger and text-align is center
-                        textDiv.style.width = textWidth + 'px';
-                        textDiv.style.left = (element.position.left + element.position.width / 2) + 'px';
-                        textDiv.style.transform = 'translateX(-50%)';
-                    } else {
-                        // Keep default positioning
+                    // Replace the text width measurement code with this:
+                    if (element.styles['text-align'] === 'center') {
                         textDiv.style.width = element.position.width + 'px';
                         textDiv.style.left = element.position.left + 'px';
+                        textDiv.style.textAlign = 'center';
+                        textDiv.style.transform = 'none';
+                    } else {
+                        textDiv.style.width = element.position.width + 'px';
+                        textDiv.style.left = element.position.left + 'px';
+                        textDiv.style.transform = 'none';
                     }
 
                     cardDiv.appendChild(textDiv);
@@ -374,7 +389,7 @@ include('phpqrcode/qrlib.php');
                         imgContainer.className = 'image-container';
 
                         imgContainer.style.position = 'absolute';
-                        imgContainer.style.left = element.position.left + 3 +'px';
+                        imgContainer.style.left = element.position.left + 3 + 'px';
                         imgContainer.style.top = element.position.top + 'px';
                         imgContainer.style.width = element.position.width + 'px';
                         imgContainer.style.height = element.position.height + 'px';
@@ -473,6 +488,8 @@ include('phpqrcode/qrlib.php');
         }
         // working code of this
         async function downloadAllPDFs(side) {
+            // Add this at the beginning of downloadAllPDFs function
+            await document.fonts.ready;
             const {
                 jsPDF
             } = window.jspdf;
@@ -557,7 +574,10 @@ include('phpqrcode/qrlib.php');
                 const canvas = await html2canvas(cards[i], {
                     scale: 3,
                     backgroundColor: null,
-                    useCORS: true
+                    useCORS: true,
+                    logging: false,
+                    letterRendering: true,
+                    allowTaint: true
                 });
 
                 const imgData = canvas.toDataURL('image/png');

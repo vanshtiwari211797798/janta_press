@@ -14,48 +14,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // ... (baaki validations same as before, without photo)
     else {
         // All form data
-        $uid = $_POST['uid'];
-        $school_id = $_POST['school_id'];
-        $emp_name = $_POST['emp_name'];
-        $emp_n_name = $_POST['emp_n_name'];
-        $gender = $_POST['gender'];
-        $gender_n = $_POST['gender_n'];
-        $dob = $_POST['dob'];
-        $dob_n = $_POST['dob_n'];
-        $husband_or_father = $_POST['husband_or_father'];
-        $husbend_father_n = $_POST['husbend_father_n'];
-        $mother_name = $_POST['mother_name'];
-        $mother_name_n = $_POST['mother_name_n'];
+        $uid = mysqli_real_escape_string($conn, $_POST['uid']);
+        $school_id = mysqli_real_escape_string($conn, $_POST['school_id']);
+        $emp_name = mysqli_real_escape_string($conn, $_POST['emp_name']);
+        $emp_n_name = mysqli_real_escape_string($conn, $_POST['emp_n_name']);
+        $gender = mysqli_real_escape_string($conn, $_POST['gender']);
+        $gender_n = mysqli_real_escape_string($conn, $_POST['gender_n']);
+        $dob = mysqli_real_escape_string($conn, $_POST['dob']);
+        $dob_n = mysqli_real_escape_string($conn, $_POST['dob_n']);
+        $husband_or_father = mysqli_real_escape_string($conn, $_POST['husband_or_father']);
+        $husbend_father_n = mysqli_real_escape_string($conn, $_POST['husbend_father_n']);
+        $mother_name = mysqli_real_escape_string($conn, $_POST['mother_name']);
+        $mother_name_n = mysqli_real_escape_string($conn, $_POST['mother_name_n']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $contact = $_POST['contact'];
-        $contact_n = $_POST['contact_n'];
-        $address = $_POST['address'];
-        $address_n = $_POST['address_n'];
-        $rfid = $_POST['rfid'];
-        $designation = $_POST['designation'];
-        $desiginition_n = $_POST['desiginition_n'];
-        $category = $_POST['category'];
-        $remark = $_POST['remark'];
-        $blood_grp = $_POST['blood_grp'];
-        $blood_grp_n = $_POST['blood_grp_n'];
-        $citizenship_number = $_POST['citizenship_number'];
-        $citizenship_number_n = $_POST['citizenship_number_n'];
-        $shaatrall_number = $_POST['shaatrall_number'];
-        $shaatrall_number_n = $_POST['shaatrall_number_n'];
-        $pan_number = $_POST['pan_number'];
-        $pan_number_n = $_POST['pan_number_n'];
-        $fileName = $_POST['old_img'];
-        // $fileName = $_FILES['photo']['name'];
-       
+        $contact = mysqli_real_escape_string($conn, $_POST['contact']);
+        $contact_n = mysqli_real_escape_string($conn, $_POST['contact_n']);
+        $address = mysqli_real_escape_string($conn, $_POST['address']);
+        $address_n = mysqli_real_escape_string($conn, $_POST['address_n']);
+        $rfid = mysqli_real_escape_string($conn, $_POST['rfid']);
+        $designation = mysqli_real_escape_string($conn, $_POST['designation']);
+        $desiginition_n = mysqli_real_escape_string($conn, $_POST['desiginition_n']);
+        $category = mysqli_real_escape_string($conn, $_POST['category']);
+        $remark = mysqli_real_escape_string($conn, $_POST['remark']);
+        $blood_grp = mysqli_real_escape_string($conn, $_POST['blood_grp']);
+        $blood_grp_n = mysqli_real_escape_string($conn, $_POST['blood_grp_n']);
+        $citizenship_number = mysqli_real_escape_string($conn, $_POST['citizenship_number']);
+        $citizenship_number_n = mysqli_real_escape_string($conn, $_POST['citizenship_number_n']);
+        $shaatrall_number = mysqli_real_escape_string($conn, $_POST['shaatrall_number']);
+        $shaatrall_number_n = mysqli_real_escape_string($conn, $_POST['shaatrall_number_n']);
+        $pan_number = mysqli_real_escape_string($conn, $_POST['pan_number']);
+        $pan_number_n = mysqli_real_escape_string($conn, $_POST['pan_number_n']);
+        $fileName = mysqli_real_escape_string($conn, $_POST['old_img']);
+        $SignatureName = mysqli_real_escape_string($conn, $_POST['old_signature']);
 
-            if(!empty($_FILES['photo']['name'])){
-                $fileName = $_FILES['photo']['name'];
-                $file_tmp_name = $_FILES['photo']['tmp_name'];
-                move_uploaded_file($file_tmp_name,"employee_photo/$fileName");
-            }else{
-                $fileName = $_POST['old_img'];
-            }
-            $update = "UPDATE employee SET 
+        // $fileName = $_FILES['photo']['name'];
+
+
+        if (!empty($_FILES['photo']['name'])) {
+            $fileName = $_FILES['photo']['name'];
+            $file_tmp_name = $_FILES['photo']['tmp_name'];
+            move_uploaded_file($file_tmp_name, "employee_photo/$fileName");
+        }
+        if (!empty($_FILES['signature']['name'])) {
+            $SignatureName = $_FILES['signature']['name'];
+            $file_tmp_sign_name = $_FILES['signature']['tmp_name'];
+            move_uploaded_file($file_tmp_sign_name, "signature/$SignatureName");
+        }
+        $update = "UPDATE employee SET 
                 school_id='$school_id',
                 emp_name='$emp_name',
                 emp_n_name='$emp_n_name',
@@ -84,15 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 shaatrall_number_n='$shaatrall_number_n',
                 pan_number='$pan_number',
                 pan_number_n='$pan_number_n',
-                photo='$fileName'           
+                photo='$fileName',
+                signature='$SignatureName'        
             WHERE id='$uid'";
 
-            if (mysqli_query($conn, $update)) {
-                echo "<script>alert('Employee updated successfully');</script>";
-            } else {
-                echo "<script>alert('Update failed');</script>";
-            }
-
+        if (mysqli_query($conn, $update)) {
+            echo "<script>alert('Employee updated successfully'); window.location.href='Id-Generate.php'</script>";
+        } else {
+            echo "<script>alert('Update failed'); window.location.href='Id-Generate.php'</script>";
+        }
     }
 }
 
@@ -120,6 +125,7 @@ if (mysqli_num_rows($empData) > 0) {
         <script src="//code.jquery.com/jquery-3.7.1.slim.min.js"></script>
         <script src="//unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
         <link rel="stylesheet" href="//unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
         <style>
             .container {
                 max-width: 1200px;
@@ -255,8 +261,10 @@ if (mysqli_num_rows($empData) > 0) {
                 <h2>Employee Management</h2>
                 <form method="post" enctype="multipart/form-data">
                     <div class="form-row">
-                        <input type="hidden" value="<?=$res['id']?>" name="uid">
-                        <input type="hidden" name="old_img" value="<?=$res['photo']?>">
+                        <input type="hidden" value="<?= $res['id'] ?>" name="uid">
+                        <input type="hidden" name="old_img" value="<?= $res['photo'] ?>">
+                        <!-- for storing the old signature of the employee -->
+                        <input type="hidden" name="old_signature" value="<?= $res['signature'] ?>">
                         <div class="form-group">
                             <label for="school_id">School Id</label>
                             <input type="text" id="school_id" name="school_id" value="<?= $res['school_id'] ?? '' ?>" readonly>
@@ -409,9 +417,247 @@ if (mysqli_num_rows($empData) > 0) {
                             <?php endif; ?>
                         </div>
                     </div>
+                    <div id="cropModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999;">
+                        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px;">
+                            <div style="width:500px; height:400px;">
+                                <img id="cropImage" src="" style="max-width:100%;">
+                            </div>
+                            <div style="margin-top:20px; text-align:center;">
+                                <button id="cropButton" style="padding:5px 15px; background:#4CAF50; color:white; border:none; cursor:pointer;">Crop</button>
+                                <button id="cancelCrop" style="padding:5px 15px; background:#f44336; color:white; border:none; cursor:pointer;">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
+                    <script>
+                        // Initialize cropper
+                        let cropper;
+                        const photoInput = document.getElementById('photo');
+                        const cropModal = document.getElementById('cropModal');
+                        const cropImage = document.getElementById('cropImage');
+                        const cropButton = document.getElementById('cropButton');
+                        const cancelCrop = document.getElementById('cancelCrop');
+
+                        photoInput.addEventListener('change', function(e) {
+                            if (e.target.files.length) {
+                                const reader = new FileReader();
+                                reader.onload = function(event) {
+                                    cropImage.src = event.target.result;
+                                    cropModal.style.display = 'block';
+
+                                    // Initialize cropper
+                                    cropper = new Cropper(cropImage, {
+                                        aspectRatio: 1, // Square aspect ratio
+                                        viewMode: 1,
+                                        autoCropArea: 0.8
+                                    });
+                                };
+                                reader.readAsDataURL(e.target.files[0]);
+                            }
+                        });
+
+                        cropButton.addEventListener('click', function(e) {
+                            e.preventDefault(); // Prevent form submission
+
+                            // Get the cropped canvas
+                            const canvas = cropper.getCroppedCanvas({
+                                width: 300, // Desired width
+                                height: 300, // Desired height
+                                minWidth: 256,
+                                minHeight: 256,
+                                maxWidth: 4096,
+                                maxHeight: 4096,
+                                fillColor: '#fff',
+                                imageSmoothingEnabled: true,
+                                imageSmoothingQuality: 'high'
+                            });
+
+                            // Convert canvas to blob
+                            canvas.toBlob(function(blob) {
+                                // Create a new File from the blob
+                                const file = new File([blob], photoInput.files[0].name, {
+                                    type: 'image/jpeg',
+                                    lastModified: Date.now()
+                                });
+
+                                // Create a new DataTransfer and add the file
+                                const dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(file);
+
+                                // Assign the DataTransfer files list to the file input
+                                photoInput.files = dataTransfer.files;
+
+                                // Hide the modal
+                                cropModal.style.display = 'none';
+
+                                // Destroy the cropper
+                                cropper.destroy();
+                            }, 'image/jpeg', 0.9); // 0.9 is the quality (0 to 1)
+                        });
+
+                        cancelCrop.addEventListener('click', function(e) {
+                            e.preventDefault(); // Prevent form submission
+
+                            // Clear the file input
+                            photoInput.value = '';
+
+                            // Hide the modal
+                            cropModal.style.display = 'none';
+
+                            // Destroy the cropper if it exists
+                            if (cropper) {
+                                cropper.destroy();
+                            }
+                        });
+                    </script>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signature">Employee signature</label>
+                            <input type="file" id="signatureInput" name="signature" class="signature-file">
+                            <?php if (!empty($res['signature'])): ?>
+                                <img src="signature/<?= $res['signature'] ?>" width="100" alt="signature" class="signature-preview">
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Signature Crop Modal -->
+                    <div id="signatureCropModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999;">
+                        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:8px;">
+                            <div style="width:600px; height:300px;">
+                                <img id="signatureCropImage" src="" style="max-width:100%;">
+                            </div>
+                            <div style="margin-top:20px; text-align:center;">
+                                <button id="signatureCropButton" style="padding:8px 20px; background:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer; margin-right:10px;">Crop Signature</button>
+                                <button id="signatureCancelCrop" style="padding:8px 20px; background:#f44336; color:white; border:none; border-radius:4px; cursor:pointer;">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Signature Cropper
+                        let signatureCropper;
+                        const signatureInput = document.getElementById('signatureInput');
+                        const signatureCropModal = document.getElementById('signatureCropModal');
+                        const signatureCropImage = document.getElementById('signatureCropImage');
+                        const signatureCropButton = document.getElementById('signatureCropButton');
+                        const signatureCancelCrop = document.getElementById('signatureCancelCrop');
+                        const signaturePreview = document.querySelector('.signature-preview');
+
+                        signatureInput.addEventListener('change', function(e) {
+                            if (e.target.files && e.target.files.length) {
+                                const file = e.target.files[0];
+
+                                // Check if file is an image
+                                if (!file.type.match('image.*')) {
+                                    alert('Please select an image file for signature');
+                                    signatureInput.value = '';
+                                    return;
+                                }
+
+                                const reader = new FileReader();
+                                reader.onload = function(event) {
+                                    signatureCropImage.src = event.target.result;
+                                    signatureCropModal.style.display = 'block';
+
+                                    // Initialize cropper with different aspect ratio (more rectangular for signatures)
+                                    if (signatureCropper) {
+                                        signatureCropper.destroy();
+                                    }
+
+                                    signatureCropper = new Cropper(signatureCropImage, {
+                                        aspectRatio: 3, // More rectangular aspect ratio for signatures
+                                        viewMode: 1,
+                                        autoCropArea: 0.7,
+                                        responsive: true,
+                                        restore: false,
+                                        guides: true,
+                                        center: true,
+                                        highlight: true,
+                                        cropBoxMovable: true,
+                                        cropBoxResizable: true,
+                                        toggleDragModeOnDblclick: false
+                                    });
+                                };
+                                reader.onerror = function() {
+                                    alert('Failed to load signature image');
+                                    signatureInput.value = '';
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
+
+                        signatureCropButton.addEventListener('click', function(e) {
+                            e.preventDefault();
+
+                            if (!signatureCropper) {
+                                signatureCropModal.style.display = 'none';
+                                return;
+                            }
+
+                            // Get cropped canvas (different dimensions for signature)
+                            const canvas = signatureCropper.getCroppedCanvas({
+                                width: 400,
+                                height: 150,
+                                minWidth: 300,
+                                minHeight: 100,
+                                fillColor: '#fff',
+                                imageSmoothingEnabled: true,
+                                imageSmoothingQuality: 'high'
+                            });
+
+                            if (!canvas) {
+                                alert('Signature cropping failed. Please try again.');
+                                return;
+                            }
+
+                            // Convert canvas to blob
+                            canvas.toBlob(function(blob) {
+                                if (!blob) {
+                                    alert('Failed to create cropped signature');
+                                    return;
+                                }
+
+                                // Create a new File from the blob
+                                const fileName = signatureInput.files[0].name;
+                                const fileExt = fileName.split('.').pop().toLowerCase();
+                                const mimeType = fileExt === 'png' ? 'image/png' : 'image/jpeg';
+
+                                const file = new File([blob], fileName, {
+                                    type: mimeType,
+                                    lastModified: Date.now()
+                                });
+
+                                // Update file input
+                                const dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(file);
+                                signatureInput.files = dataTransfer.files;
+
+                                // Update preview
+                                if (signaturePreview) {
+                                    signaturePreview.src = URL.createObjectURL(blob);
+                                }
+
+                                // Clean up
+                                signatureCropModal.style.display = 'none';
+                                signatureCropper.destroy();
+                                signatureCropper = null;
+
+                            }, 'image/jpeg', 0.9);
+                        });
+
+                        signatureCancelCrop.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            signatureInput.value = '';
+                            signatureCropModal.style.display = 'none';
+                            if (signatureCropper) {
+                                signatureCropper.destroy();
+                                signatureCropper = null;
+                            }
+                        });
+                    </script>
                     <div class="submit-button">
-                        <button type="submit">Submit</button>
+                        <button type="submit">Update</button>
                     </div>
                 </form>
 

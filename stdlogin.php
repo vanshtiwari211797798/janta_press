@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Student Login</title>
     <!-- Google Translate Script -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                     pageLanguage: 'en',
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
         setTimeout(setNepaliLanguage, 3000);
-    </script>
+    </script> -->
     <style>
         * {
             margin: 0;
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-    <div id="google_translate_element"></div>
+    <!-- <div id="google_translate_element"></div> -->
     <div class="container">
         <div class="login-form">
             <h2>Student Login</h2>
@@ -214,31 +214,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="class">Class</label>
                     <select id="class" name="class" required>
                         <option value="">Select Class</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
+                        <?php
+                        $fetchClass = "SELECT class FROM addclass";
+                        $CLASSdATA = mysqli_query($conn, $fetchClass);
+                        if (mysqli_num_rows($CLASSdATA) > 0) {
+                            while ($res = mysqli_fetch_assoc($CLASSdATA)) {
+
+
+                        ?>
+                                <option value="<?= $res['class'] ?>"> <?= $res['class'] ?></option>
+                        <?php
+                            }
+                        }
+                        ?>
                     </select>
                 </div>
 
                 <div class="input-group">
                     <label for="section">Section</label>
                     <select id="section" name="section" required>
-                        <option value="">Select Section</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
+                    <option value="">Select Section</option>
+                        <?php
+                        $fetchSection = "SELECT DISTINCT(section) FROM addsection";
+                        $SECTIONdATA = mysqli_query($conn, $fetchSection);
+                        if (mysqli_num_rows($SECTIONdATA) > 0) {
+                            while ($resSection = mysqli_fetch_assoc($SECTIONdATA)) {
+
+
+                        ?>
+
+                                <option value="<?=$resSection['section']?>"><?=$resSection['section']?></option>
+                        <?php
+
+                            }
+                        }
+                        ?>
                     </select>
                 </div>
 

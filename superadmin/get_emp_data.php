@@ -39,6 +39,7 @@ $students = [];
 while ($row = $result->fetch_assoc()) {
     $students[] = [
         'id' => $row['id'],
+        'school_id' => $row['school_id'],
         'emp_name' => $row['emp_name'],
         'husband_or_father' => $row['husband_or_father'],
         'gender' => $row['gender'],
@@ -63,7 +64,8 @@ while ($row = $result->fetch_assoc()) {
         'shaatrall_number' => $row['shaatrall_number'],      
         'shaatrall_number_n' => $row['shaatrall_number_n'],
         'pan_number' => $row['pan_number'],
-        'pan_number_n' => $row['pan_number_n']
+        'pan_number_n' => $row['pan_number_n'],
+        'signature' => $row['signature']
     ];
 }
 
