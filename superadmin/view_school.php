@@ -70,6 +70,10 @@ include("config/db.php");
                                 <i class="fas fa-table"></i>View Student</a>
                         </li>
                         <li>
+                            <a href="add_banner.php">
+                                <i class="fas fa-table"></i>Add Banner</a>
+                        </li>
+                        <li>
                             <a href="generate_id_card.php">
                                 <i class="far fa-check-square"></i>Generate School Id</a>
                         </li>
@@ -104,6 +108,10 @@ include("config/db.php");
                         <li class="active">
                             <a href="view_school.php">
                                 <i class="fas fa-table"></i>View Schools</a>
+                        </li>
+                        <li>
+                            <a href="add_banner.php">
+                                <i class="fas fa-table"></i>Add Banner</a>
                         </li>
                         <li>
                             <a href="view_student.php">

@@ -66,6 +66,10 @@ include("config/db.php");
                                 <i class="fas fa-table"></i>View School</a>
                         </li>
                         <li>
+                            <a href="add_banner.php">
+                                <i class="fas fa-table"></i>Add Banner</a>
+                        </li>
+                        <li>
                             <a href="view_student.php">
                                 <i class="far fa-check-square"></i>View Student</a>
                         </li>
@@ -100,6 +104,10 @@ include("config/db.php");
                         <li class="active">
                             <a href="view_school.php">
                                 <i class="fas fa-table"></i>View School</a>
+                        </li>
+                        <li>
+                            <a href="add_banner.php">
+                                <i class="fas fa-table"></i>Add Banner</a>
                         </li>
                         <li>
                             <a href="view_student.php">

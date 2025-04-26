@@ -384,6 +384,13 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                     const cropButton = document.getElementById('cropButton');
                     const cancelCrop = document.getElementById('cancelCrop');
 
+                    // Convert mm to pixels (assuming 96 DPI)
+                    // 1 inch = 25.4 mm, 96 pixels per inch
+                    // So 1 mm = 96 / 25.4 ≈ 3.7795 pixels
+                    const mmToPx = 96 / 25.4;
+                    const targetWidthPx = 25 * mmToPx; // 25mm in pixels
+                    const targetHeightPx = 30 * mmToPx; // 30mm in pixels
+
                     photoInput.addEventListener('change', function(e) {
                         if (e.target.files.length) {
                             const reader = new FileReader();
@@ -391,11 +398,15 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                                 cropImage.src = event.target.result;
                                 cropModal.style.display = 'block';
 
-                                // Initialize cropper
+                                // Initialize cropper with the specific aspect ratio (25:30 = 5:6)
                                 cropper = new Cropper(cropImage, {
-                                    aspectRatio: 1, // Square aspect ratio
+                                    aspectRatio: 25 / 30, // 25mm width / 30mm height
                                     viewMode: 1,
-                                    autoCropArea: 0.8
+                                    autoCropArea: 0.8,
+                                    ready: function() {
+                                        // Auto-crop to the maximum possible area with the correct aspect ratio
+                                        this.cropper.crop();
+                                    }
                                 });
                             };
                             reader.readAsDataURL(e.target.files[0]);
@@ -405,14 +416,14 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                     cropButton.addEventListener('click', function(e) {
                         e.preventDefault(); // Prevent form submission
 
-                        // Get the cropped canvas
+                        // Get the cropped canvas with exact dimensions in mm (converted to pixels)
                         const canvas = cropper.getCroppedCanvas({
-                            width: 300, // Desired width
-                            height: 300, // Desired height
-                            minWidth: 256,
-                            minHeight: 256,
-                            maxWidth: 4096,
-                            maxHeight: 4096,
+                            width: targetWidthPx,
+                            height: targetHeightPx,
+                            minWidth: targetWidthPx,
+                            minHeight: targetHeightPx,
+                            maxWidth: targetWidthPx,
+                            maxHeight: targetHeightPx,
                             fillColor: '#fff',
                             imageSmoothingEnabled: true,
                             imageSmoothingQuality: 'high'

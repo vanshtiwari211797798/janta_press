@@ -439,6 +439,11 @@ if (mysqli_num_rows($empData) > 0) {
                         const cropButton = document.getElementById('cropButton');
                         const cancelCrop = document.getElementById('cancelCrop');
 
+                        // Convert mm to pixels (assuming 96 DPI)
+                        const mmToPx = 96 / 25.4;
+                        const targetWidthPx = 25 * mmToPx; // 25mm in pixels
+                        const targetHeightPx = 30 * mmToPx; // 30mm in pixels
+
                         photoInput.addEventListener('change', function(e) {
                             if (e.target.files.length) {
                                 const reader = new FileReader();
@@ -446,11 +451,14 @@ if (mysqli_num_rows($empData) > 0) {
                                     cropImage.src = event.target.result;
                                     cropModal.style.display = 'block';
 
-                                    // Initialize cropper
+                                    // Initialize cropper with 25:30 aspect ratio
                                     cropper = new Cropper(cropImage, {
-                                        aspectRatio: 1, // Square aspect ratio
+                                        aspectRatio: 25 / 30, // 25mm width / 30mm height
                                         viewMode: 1,
-                                        autoCropArea: 0.8
+                                        autoCropArea: 0.8,
+                                        ready: function() {
+                                            this.cropper.crop(); // Auto-crop on initialization
+                                        }
                                     });
                                 };
                                 reader.readAsDataURL(e.target.files[0]);
@@ -460,14 +468,14 @@ if (mysqli_num_rows($empData) > 0) {
                         cropButton.addEventListener('click', function(e) {
                             e.preventDefault(); // Prevent form submission
 
-                            // Get the cropped canvas
+                            // Get the cropped canvas with exact dimensions (25mm × 30mm in pixels)
                             const canvas = cropper.getCroppedCanvas({
-                                width: 300, // Desired width
-                                height: 300, // Desired height
-                                minWidth: 256,
-                                minHeight: 256,
-                                maxWidth: 4096,
-                                maxHeight: 4096,
+                                width: targetWidthPx,
+                                height: targetHeightPx,
+                                minWidth: targetWidthPx,
+                                minHeight: targetHeightPx,
+                                maxWidth: targetWidthPx,
+                                maxHeight: targetHeightPx,
                                 fillColor: '#fff',
                                 imageSmoothingEnabled: true,
                                 imageSmoothingQuality: 'high'
@@ -535,38 +543,43 @@ if (mysqli_num_rows($empData) > 0) {
                     </div>
 
                     <script>
-                        // Signature Cropper
-                        let signatureCropper;
-                        const signatureInput = document.getElementById('signatureInput');
-                        const signatureCropModal = document.getElementById('signatureCropModal');
-                        const signatureCropImage = document.getElementById('signatureCropImage');
-                        const signatureCropButton = document.getElementById('signatureCropButton');
-                        const signatureCancelCrop = document.getElementById('signatureCancelCrop');
-                        const signaturePreview = document.querySelector('.signature-preview');
+                        // Signature Cropper (all variables prefixed with 'sig' to avoid duplication)
+                        let sigCropper;
+                        const sigInput = document.getElementById('signatureInput');
+                        const sigCropModal = document.getElementById('signatureCropModal');
+                        const sigCropImg = document.getElementById('signatureCropImage');
+                        const sigCropBtn = document.getElementById('signatureCropButton');
+                        const sigCancelBtn = document.getElementById('signatureCancelCrop');
+                        const sigPreview = document.querySelector('.signature-preview');
 
-                        signatureInput.addEventListener('change', function(e) {
+                        // Convert mm to pixels (assuming 96 DPI)
+                        const mmToPxh = 96 / 25.4;
+                        const sigTargetWidth = 25 * mmToPxh; // 25mm in pixels
+                        const sigTargetHeight = 30 * mmToPxh; // 30mm in pixels
+
+                        sigInput.addEventListener('change', function(e) {
                             if (e.target.files && e.target.files.length) {
                                 const file = e.target.files[0];
 
                                 // Check if file is an image
                                 if (!file.type.match('image.*')) {
                                     alert('Please select an image file for signature');
-                                    signatureInput.value = '';
+                                    sigInput.value = '';
                                     return;
                                 }
 
                                 const reader = new FileReader();
                                 reader.onload = function(event) {
-                                    signatureCropImage.src = event.target.result;
-                                    signatureCropModal.style.display = 'block';
+                                    sigCropImg.src = event.target.result;
+                                    sigCropModal.style.display = 'block';
 
-                                    // Initialize cropper with different aspect ratio (more rectangular for signatures)
-                                    if (signatureCropper) {
-                                        signatureCropper.destroy();
+                                    // Initialize cropper with 25:30 aspect ratio
+                                    if (sigCropper) {
+                                        sigCropper.destroy();
                                     }
 
-                                    signatureCropper = new Cropper(signatureCropImage, {
-                                        aspectRatio: 3, // More rectangular aspect ratio for signatures
+                                    sigCropper = new Cropper(sigCropImg, {
+                                        aspectRatio: 25 / 30, // 25mm width / 30mm height
                                         viewMode: 1,
                                         autoCropArea: 0.7,
                                         responsive: true,
@@ -576,50 +589,55 @@ if (mysqli_num_rows($empData) > 0) {
                                         highlight: true,
                                         cropBoxMovable: true,
                                         cropBoxResizable: true,
-                                        toggleDragModeOnDblclick: false
+                                        toggleDragModeOnDblclick: false,
+                                        ready: function() {
+                                            this.cropper.crop(); // Auto-crop on initialization
+                                        }
                                     });
                                 };
                                 reader.onerror = function() {
                                     alert('Failed to load signature image');
-                                    signatureInput.value = '';
+                                    sigInput.value = '';
                                 };
                                 reader.readAsDataURL(file);
                             }
                         });
 
-                        signatureCropButton.addEventListener('click', function(e) {
+                        sigCropBtn.addEventListener('click', function(e) {
                             e.preventDefault();
 
-                            if (!signatureCropper) {
-                                signatureCropModal.style.display = 'none';
+                            if (!sigCropper) {
+                                sigCropModal.style.display = 'none';
                                 return;
                             }
 
-                            // Get cropped canvas (different dimensions for signature)
-                            const canvas = signatureCropper.getCroppedCanvas({
-                                width: 400,
-                                height: 150,
-                                minWidth: 300,
-                                minHeight: 100,
+                            // Get cropped canvas with exact dimensions (25mm × 30mm in pixels)
+                            const sigCanvas = sigCropper.getCroppedCanvas({
+                                width: sigTargetWidth,
+                                height: sigTargetHeight,
+                                minWidth: sigTargetWidth,
+                                minHeight: sigTargetHeight,
+                                maxWidth: sigTargetWidth,
+                                maxHeight: sigTargetHeight,
                                 fillColor: '#fff',
                                 imageSmoothingEnabled: true,
                                 imageSmoothingQuality: 'high'
                             });
 
-                            if (!canvas) {
+                            if (!sigCanvas) {
                                 alert('Signature cropping failed. Please try again.');
                                 return;
                             }
 
                             // Convert canvas to blob
-                            canvas.toBlob(function(blob) {
+                            sigCanvas.toBlob(function(blob) {
                                 if (!blob) {
                                     alert('Failed to create cropped signature');
                                     return;
                                 }
 
                                 // Create a new File from the blob
-                                const fileName = signatureInput.files[0].name;
+                                const fileName = sigInput.files[0].name;
                                 const fileExt = fileName.split('.').pop().toLowerCase();
                                 const mimeType = fileExt === 'png' ? 'image/png' : 'image/jpeg';
 
@@ -629,30 +647,30 @@ if (mysqli_num_rows($empData) > 0) {
                                 });
 
                                 // Update file input
-                                const dataTransfer = new DataTransfer();
-                                dataTransfer.items.add(file);
-                                signatureInput.files = dataTransfer.files;
+                                const sigDataTransfer = new DataTransfer();
+                                sigDataTransfer.items.add(file);
+                                sigInput.files = sigDataTransfer.files;
 
                                 // Update preview
-                                if (signaturePreview) {
-                                    signaturePreview.src = URL.createObjectURL(blob);
+                                if (sigPreview) {
+                                    sigPreview.src = URL.createObjectURL(blob);
                                 }
 
                                 // Clean up
-                                signatureCropModal.style.display = 'none';
-                                signatureCropper.destroy();
-                                signatureCropper = null;
+                                sigCropModal.style.display = 'none';
+                                sigCropper.destroy();
+                                sigCropper = null;
 
                             }, 'image/jpeg', 0.9);
                         });
 
-                        signatureCancelCrop.addEventListener('click', function(e) {
+                        sigCancelBtn.addEventListener('click', function(e) {
                             e.preventDefault();
-                            signatureInput.value = '';
-                            signatureCropModal.style.display = 'none';
-                            if (signatureCropper) {
-                                signatureCropper.destroy();
-                                signatureCropper = null;
+                            sigInput.value = '';
+                            sigCropModal.style.display = 'none';
+                            if (sigCropper) {
+                                sigCropper.destroy();
+                                sigCropper = null;
                             }
                         });
                     </script>
