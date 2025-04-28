@@ -431,7 +431,7 @@ if (mysqli_num_rows($empData) > 0) {
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
                     <script>
-                        // Initialize cropper
+                        // Initialize cropper with quality preservation
                         let cropper;
                         const photoInput = document.getElementById('photo');
                         const cropModal = document.getElementById('cropModal');
@@ -439,8 +439,8 @@ if (mysqli_num_rows($empData) > 0) {
                         const cropButton = document.getElementById('cropButton');
                         const cancelCrop = document.getElementById('cancelCrop');
 
-                        // Convert mm to pixels (assuming 96 DPI)
-                        const mmToPx = 96 / 25.4;
+                        // Higher DPI conversion (300 DPI for better quality)
+                        const mmToPx = 300 / 25.4;
                         const targetWidthPx = 25 * mmToPx; // 25mm in pixels
                         const targetHeightPx = 30 * mmToPx; // 30mm in pixels
 
@@ -451,69 +451,86 @@ if (mysqli_num_rows($empData) > 0) {
                                     cropImage.src = event.target.result;
                                     cropModal.style.display = 'block';
 
-                                    // Initialize cropper with 25:30 aspect ratio
+                                    // Destroy previous cropper if exists
+                                    if (cropper) {
+                                        cropper.destroy();
+                                    }
+
+                                    // Initialize cropper with quality settings
                                     cropper = new Cropper(cropImage, {
-                                        aspectRatio: 25 / 30, // 25mm width / 30mm height
+                                        aspectRatio: 25 / 30,
                                         viewMode: 1,
                                         autoCropArea: 0.8,
+                                        responsive: true,
+                                        restore: false,
+                                        checkCrossOrigin: false,
+                                        checkOrientation: true,
+                                        background: false,
                                         ready: function() {
-                                            this.cropper.crop(); // Auto-crop on initialization
+                                            this.cropper.crop();
                                         }
                                     });
+                                };
+                                reader.onerror = function() {
+                                    alert('Error loading image');
+                                    photoInput.value = '';
                                 };
                                 reader.readAsDataURL(e.target.files[0]);
                             }
                         });
 
                         cropButton.addEventListener('click', function(e) {
-                            e.preventDefault(); // Prevent form submission
+                            e.preventDefault();
 
-                            // Get the cropped canvas with exact dimensions (25mm × 30mm in pixels)
+                            if (!cropper) return;
+
+                            // Create canvas at higher resolution (2x)
                             const canvas = cropper.getCroppedCanvas({
-                                width: targetWidthPx,
-                                height: targetHeightPx,
-                                minWidth: targetWidthPx,
-                                minHeight: targetHeightPx,
-                                maxWidth: targetWidthPx,
-                                maxHeight: targetHeightPx,
+                                width: targetWidthPx * 2,
+                                height: targetHeightPx * 2,
                                 fillColor: '#fff',
                                 imageSmoothingEnabled: true,
                                 imageSmoothingQuality: 'high'
                             });
 
-                            // Convert canvas to blob
-                            canvas.toBlob(function(blob) {
-                                // Create a new File from the blob
-                                const file = new File([blob], photoInput.files[0].name, {
-                                    type: 'image/jpeg',
+                            // Create final canvas for optimal quality
+                            const finalCanvas = document.createElement('canvas');
+                            finalCanvas.width = targetWidthPx;
+                            finalCanvas.height = targetHeightPx;
+                            const ctx = finalCanvas.getContext('2d');
+
+                            // High quality downscaling
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = 'high';
+                            ctx.drawImage(canvas, 0, 0, targetWidthPx, targetHeightPx);
+
+                            // Determine best format based on original
+                            const fileName = photoInput.files[0].name;
+                            const isPNG = fileName.toLowerCase().endsWith('.png');
+                            const mimeType = isPNG ? 'image/png' : 'image/jpeg';
+
+                            // Convert to blob with best quality
+                            finalCanvas.toBlob(function(blob) {
+                                const file = new File([blob], fileName, {
+                                    type: mimeType,
                                     lastModified: Date.now()
                                 });
 
-                                // Create a new DataTransfer and add the file
+                                // Update file input
                                 const dataTransfer = new DataTransfer();
                                 dataTransfer.items.add(file);
-
-                                // Assign the DataTransfer files list to the file input
                                 photoInput.files = dataTransfer.files;
 
-                                // Hide the modal
+                                // Clean up
                                 cropModal.style.display = 'none';
-
-                                // Destroy the cropper
                                 cropper.destroy();
-                            }, 'image/jpeg', 0.9); // 0.9 is the quality (0 to 1)
+                            }, mimeType, isPNG ? undefined : 0.95); // 0.95 quality for JPEG
                         });
 
                         cancelCrop.addEventListener('click', function(e) {
-                            e.preventDefault(); // Prevent form submission
-
-                            // Clear the file input
+                            e.preventDefault();
                             photoInput.value = '';
-
-                            // Hide the modal
                             cropModal.style.display = 'none';
-
-                            // Destroy the cropper if it exists
                             if (cropper) {
                                 cropper.destroy();
                             }

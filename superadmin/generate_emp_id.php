@@ -344,6 +344,13 @@
 
             <label><input type="checkbox" id="boldBack" /> Bold</label>
             <label><input type="checkbox" id="italicBack" /> Italic</label>
+            <label>Text Alignment:</label>
+            <select id="textAlignBack">
+                <option value="">Select Allignment</option>
+                <!-- <option value="left">Left</option> -->
+                <option value="center">Center</option>
+                <!-- <option value="right">Right</option> -->
+            </select>
 
             <label>Upload Image:</label>
             <input type="file" id="imageUploadBack" accept="image/*" />

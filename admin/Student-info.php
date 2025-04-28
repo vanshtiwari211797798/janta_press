@@ -376,7 +376,7 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
                 <script>
-                    // Initialize cropper
+                    // Initialize cropper with better quality preservation
                     let cropper;
                     const photoInput = document.getElementById('photo');
                     const cropModal = document.getElementById('cropModal');
@@ -384,12 +384,10 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                     const cropButton = document.getElementById('cropButton');
                     const cancelCrop = document.getElementById('cancelCrop');
 
-                    // Convert mm to pixels (assuming 96 DPI)
-                    // 1 inch = 25.4 mm, 96 pixels per inch
-                    // So 1 mm = 96 / 25.4 ≈ 3.7795 pixels
-                    const mmToPx = 96 / 25.4;
-                    const targetWidthPx = 25 * mmToPx; // 25mm in pixels
-                    const targetHeightPx = 30 * mmToPx; // 30mm in pixels
+                    // High precision mm to pixels conversion (300 DPI for better print quality)
+                    const mmToPx = 300 / 25.4; // Using 300 DPI instead of 96
+                    const targetWidthPx = Math.round(25 * mmToPx); // 25mm in pixels
+                    const targetHeightPx = Math.round(30 * mmToPx); // 30mm in pixels
 
                     photoInput.addEventListener('change', function(e) {
                         if (e.target.files.length) {
@@ -398,72 +396,98 @@ $school_id = isset($_SESSION['schoolId']) ? $_SESSION['schoolId'] : '';
                                 cropImage.src = event.target.result;
                                 cropModal.style.display = 'block';
 
-                                // Initialize cropper with the specific aspect ratio (25:30 = 5:6)
+                                // Destroy previous cropper if exists
+                                if (cropper) {
+                                    cropper.destroy();
+                                }
+
+                                // Initialize cropper with high quality settings
                                 cropper = new Cropper(cropImage, {
-                                    aspectRatio: 25 / 30, // 25mm width / 30mm height
+                                    aspectRatio: 25 / 30,
                                     viewMode: 1,
                                     autoCropArea: 0.8,
+                                    responsive: true,
+                                    restore: false,
+                                    checkCrossOrigin: false,
+                                    checkOrientation: true,
+                                    guides: true,
+                                    center: true,
+                                    highlight: true,
+                                    background: false,
                                     ready: function() {
-                                        // Auto-crop to the maximum possible area with the correct aspect ratio
                                         this.cropper.crop();
                                     }
                                 });
+                            };
+                            reader.onerror = function() {
+                                alert('Error loading image');
+                                photoInput.value = '';
                             };
                             reader.readAsDataURL(e.target.files[0]);
                         }
                     });
 
                     cropButton.addEventListener('click', function(e) {
-                        e.preventDefault(); // Prevent form submission
+                        e.preventDefault();
 
-                        // Get the cropped canvas with exact dimensions in mm (converted to pixels)
+                        if (!cropper) return;
+
+                        // Get high quality cropped canvas (2x resolution then downscale)
                         const canvas = cropper.getCroppedCanvas({
-                            width: targetWidthPx,
-                            height: targetHeightPx,
+                            width: targetWidthPx * 2, // Double resolution
+                            height: targetHeightPx * 2,
                             minWidth: targetWidthPx,
                             minHeight: targetHeightPx,
-                            maxWidth: targetWidthPx,
-                            maxHeight: targetHeightPx,
+                            maxWidth: targetWidthPx * 4,
+                            maxHeight: targetHeightPx * 4,
                             fillColor: '#fff',
-                            imageSmoothingEnabled: true,
+                            imageSmoothingEnabled: false, // Sharper edges
                             imageSmoothingQuality: 'high'
                         });
 
-                        // Convert canvas to blob
-                        canvas.toBlob(function(blob) {
-                            // Create a new File from the blob
-                            const file = new File([blob], photoInput.files[0].name, {
-                                type: 'image/jpeg',
+                        // Create off-screen canvas for final quality optimization
+                        const finalCanvas = document.createElement('canvas');
+                        finalCanvas.width = targetWidthPx;
+                        finalCanvas.height = targetHeightPx;
+                        const ctx = finalCanvas.getContext('2d');
+
+                        // Draw with high quality downscaling
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        ctx.drawImage(canvas, 0, 0, targetWidthPx, targetHeightPx);
+
+                        // Determine best file type
+                        const fileName = photoInput.files[0].name;
+                        const isPNG = fileName.toLowerCase().endsWith('.png');
+                        const mimeType = isPNG ? 'image/png' : 'image/jpeg';
+
+                        // Convert to blob with highest quality
+                        finalCanvas.toBlob(function(blob) {
+                            const optimizedFile = new File([blob], fileName, {
+                                type: mimeType,
                                 lastModified: Date.now()
                             });
 
-                            // Create a new DataTransfer and add the file
+                            // Update file input
                             const dataTransfer = new DataTransfer();
-                            dataTransfer.items.add(file);
-
-                            // Assign the DataTransfer files list to the file input
+                            dataTransfer.items.add(optimizedFile);
                             photoInput.files = dataTransfer.files;
 
-                            // Hide the modal
+                            // Clean up
                             cropModal.style.display = 'none';
-
-                            // Destroy the cropper
                             cropper.destroy();
-                        }, 'image/jpeg', 0.9); // 0.9 is the quality (0 to 1)
+                            cropper = null;
+
+                        }, mimeType, isPNG ? undefined : 0.95); // 0.95 quality for JPEG
                     });
 
                     cancelCrop.addEventListener('click', function(e) {
-                        e.preventDefault(); // Prevent form submission
-
-                        // Clear the file input
+                        e.preventDefault();
                         photoInput.value = '';
-
-                        // Hide the modal
                         cropModal.style.display = 'none';
-
-                        // Destroy the cropper if it exists
                         if (cropper) {
                             cropper.destroy();
+                            cropper = null;
                         }
                     });
                 </script>

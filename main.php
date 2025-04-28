@@ -51,17 +51,27 @@
                 aria-label="Slide 9"></button>
         </div>
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img
-                    src="img/2.jpg"
-                    class="d-block w-100" />
-            </div>
-            <div class="carousel-item">
-                <img src="img/1.jpg" class="d-block w-100" />
-            </div>
+            <?php
+            include("admin/DB.php");
+            $sql = "SELECT * FROM banners";
+            $data = mysqli_query($conn, $sql);
+            $i = 0; // counter
 
-
+            while ($res = mysqli_fetch_assoc($data)) {
+            ?>
+                <div class="carousel-item <?php if ($i == 0) {
+                                                echo 'active';
+                                            } ?>">
+                    <img
+                        src="superadmin/banner/<?= $res['image'] ?>"
+                        class="d-block w-100" />
+                </div>
+            <?php
+                $i++; // increase counter
+            }
+            ?>
         </div>
+
         <button
             class="carousel-control-prev"
             type="button"
