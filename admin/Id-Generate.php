@@ -156,6 +156,7 @@ $data = mysqli_query($conn, $sql);
                         <th>Id</th>
                         <th>School Id</th>
                         <th>Image</th>
+                        <th>Signature</th>
                         <th>Employee Name</th>
                         <th>Gender</th>
                         <th>Contact</th>
@@ -176,6 +177,7 @@ $data = mysqli_query($conn, $sql);
                                 <td><?= $res['id'] ?></td>
                                 <td><?= $res['school_id'] ?></td>
                                 <td><img src="employee_photo/<?= $res['photo'] ?>" height="50px" width="50px" alt=""></td>
+                                <td><img src="signature/<?= $res['signature'] ?>" height="40px" width="100px" alt=""></td>
                                 <td><?= $res['emp_name'] ?></td>
                                 <td><?= $res['gender'] ?></td>
                                 <td><?= $res['contact'] ?></td>

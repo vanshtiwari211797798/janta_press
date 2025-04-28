@@ -547,7 +547,7 @@ if (mysqli_num_rows($empData) > 0) {
                     </div>
 
                     <!-- Signature Crop Modal -->
-                    <div id="signatureCropModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999;">
+                    <!-- <div id="signatureCropModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999;">
                         <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:8px;">
                             <div style="width:600px; height:300px;">
                                 <img id="signatureCropImage" src="" style="max-width:100%;">
@@ -557,8 +557,8 @@ if (mysqli_num_rows($empData) > 0) {
                                 <button id="signatureCancelCrop" style="padding:8px 20px; background:#f44336; color:white; border:none; border-radius:4px; cursor:pointer;">Cancel</button>
                             </div>
                         </div>
-                    </div>
-
+                    </div> -->
+<!-- 
                     <script>
                         // Signature Cropper (all variables prefixed with 'sig' to avoid duplication)
                         let sigCropper;
@@ -690,7 +690,7 @@ if (mysqli_num_rows($empData) > 0) {
                                 sigCropper = null;
                             }
                         });
-                    </script>
+                    </script> -->
                     <div class="submit-button">
                         <button type="submit">Update</button>
                     </div>

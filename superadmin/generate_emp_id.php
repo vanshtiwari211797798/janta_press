@@ -697,7 +697,7 @@
             $('#idCardBack').empty().css('background-image', 'none');
 
             // Load the template
-            $.getJSON(`get-idcard.php?id=${schoolId}`, function(data) {
+            $.getJSON(`get-emp_id.php?id=${schoolId}`, function(data) {
                 if (data) {
                     // Set card dimensions
                     $('#cardWidthMm').val(data.width);
