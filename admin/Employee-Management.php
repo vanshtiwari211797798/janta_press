@@ -91,14 +91,14 @@ include("DB.php");
                         </div>
                         <a href="emp_csv_file.php">More info</a>
                     </div>
-                    <div class="card leave" style="background-color: #1d098d;">
+                    <!-- <div class="card leave" style="background-color: #1d098d;">
                         <div id="card-content">
                             <h3>
                                 Staff Face Assign</h3>
                             <p>Enter</p>
                         </div>
                         <a href="Staff-Face-Assign.php">More info</a>
-                    </div>
+                    </div> -->
 
                     <!-- <div class="card attendance" style="background-color: #c04984;">
                         <div id="card-content">
@@ -109,13 +109,13 @@ include("DB.php");
                         <a href="Assign-Rfid-Card.php">More info</a>
                     </div> -->
 
-                    <div class="card sms" style="background-color: #194042;">
+                    <!-- <div class="card sms" style="background-color: #194042;">
                         <div id="card-content">
                             <h3>Staff QRCODE Generate</h3>
                             <p>Enter</p>
                         </div>
                         <a href="Staff-Qrcode-Generate.php">More info</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

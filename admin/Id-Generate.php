@@ -120,6 +120,7 @@ $data = mysqli_query($conn, $sql);
 </head>
 
 <body>
+    
     <div id="nav">
         <a href='Dashboard.php'><img id="logo" src="janta_logo.jpeg" alt=""></a>
         <a href="index.php">
@@ -147,6 +148,7 @@ $data = mysqli_query($conn, $sql);
                         <button type="submit">Filter</button>
                     </div>
                 </form>
+                
             </div>
 
             <table>

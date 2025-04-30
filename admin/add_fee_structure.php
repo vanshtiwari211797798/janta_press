@@ -28,28 +28,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 alert('Holiday for is required');
             </script>
         ";
-    }  elseif (empty($_POST['account_number'])) {
+    } elseif (empty($_POST['account_number'])) {
         echo "
             <script>
                 alert('Account Number is required');
             </script>
         ";
-    }
-    elseif (empty($_POST['ifsc_code'])) {
+    } elseif (empty($_POST['ifsc_code'])) {
         echo "
             <script>
                 alert('IFSC Code is required');
             </script>
         ";
-    }
-    elseif (empty($_POST['bank_name'])) {
+    } elseif (empty($_POST['bank_name'])) {
         echo "
             <script>
                 alert('Bank Name is required');
             </script>
         ";
-    }
-    elseif (empty($_FILES['qr_code']['name'])) {
+    } elseif (empty($_FILES['qr_code']['name'])) {
         echo "
             <script>
                 alert('QR image is required');
@@ -239,18 +236,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="section">Class</label>
                         <select id="section" name="class_fee">
                             <option value="">Select</option>
-                            <option value="1">Class 1</option>
-                            <option value="2">Class 2</option>
-                            <option value="3">Class 3</option>
-                            <option value="4">Class 4</option>
-                            <option value="5">Class 5</option>
-                            <option value="6">Class 6</option>
-                            <option value="7">Class 7</option>
-                            <option value="8">Class 8</option>
-                            <option value="9">Class 9</option>
-                            <option value="10">Class 10</option>
-                            <option value="11">Class 11</option>
-                            <option value="12">Class 12</option>
+                            <?php
+                            $fetchClass = "SELECT class FROM addclass WHERE school_id='$schoolId'";
+                            $classList = mysqli_query($conn, $fetchClass);
+                            if (mysqli_num_rows($classList) > 0) {
+                                while ($classData = mysqli_fetch_assoc($classList)) {
+
+
+                            ?>
+                                    <option value="<?= $classData['class'] ?>"><?= $classData['class'] ?></option>
+                            <?php
+                                }
+                            } else {
+                                echo "<option value=''>Please enter class by admin panel</option>";
+                            }
+                            ?>
                         </select>
 
                     </div>
@@ -258,12 +258,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="section">Section</label>
                         <select id="section" name="section">
                             <option value="">Select</option>
-                            <option value="A">Section A</option>
-                            <option value="B">Section B</option>
-                            <option value="C">Section C</option>
-                            <option value="D">Section D</option>
-                            <option value="E">Section E</option>
-                            <option value="F">Section F</option>
+                            <?php
+                            $fetchClass = "SELECT section FROM addsection WHERE school_id='$schoolId'";
+                            $classList = mysqli_query($conn, $fetchClass);
+                            if (mysqli_num_rows($classList) > 0) {
+                                while ($classData = mysqli_fetch_assoc($classList)) {
+
+
+                            ?>
+                                    <option value="<?= $classData['section'] ?>"><?= $classData['section'] ?></option>
+                            <?php
+                                }
+                            } else {
+                                echo "<option value=''>Please enter class by admin panel</option>";
+                            }
+                            ?>
                         </select>
 
                     </div>

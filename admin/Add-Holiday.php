@@ -221,12 +221,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="form-group">
                         <label for="dob">From Date*</label>
-                        <input type="text" style="cursor: pointer;" name="from_date" id="dob" class="bod-picker" placeholder="Select from date">
+                        <input type="text" style="cursor: pointer;" name="from_date" id="myDate" class="bod-picker" placeholder="YYYY-MM-DD">
                     </div>
+                    <script>
+                        const dateInput = document.getElementById("myDate");
+
+                        dateInput.addEventListener("input", function(e) {
+                            let value = this.value.replace(/[^0-9]/g, ""); // Remove non-numeric
+                            if (value.length > 4) {
+                                value = value.slice(0, 4) + "-" + value.slice(4);
+                            }
+                            if (value.length > 7) {
+                                value = value.slice(0, 7) + "-" + value.slice(7, 9);
+                            }
+                            this.value = value;
+                        });
+                    </script>
                     <div class="form-group">
                         <label for="dob">To Date*</label>
-                        <input type="text" style="cursor: pointer;" name="to_date" id="dob" class="bod-picker" placeholder="Select to date">
+                        <input type="text" style="cursor: pointer;" name="to_date" id="myDate2" placeholder="YYYY-MM-DD">
                     </div>
+                    <script>
+                        (() => {
+                            const dateInput = document.getElementById("myDate2");
+
+                            dateInput.addEventListener("input", function(e) {
+                                let value = this.value.replace(/[^0-9]/g, ""); // Remove non-numeric
+                                if (value.length > 4) {
+                                    value = value.slice(0, 4) + "-" + value.slice(4);
+                                }
+                                if (value.length > 7) {
+                                    value = value.slice(0, 7) + "-" + value.slice(7, 9);
+                                }
+                                this.value = value;
+                            });
+                        })(); // <-- yeh missing tha
+                    </script>
                     <div class="form-group">
                         <label for="section">Holiday For*</label>
                         <select id="section" name="holiday_for">
@@ -291,16 +321,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         <script src="script.js"></script>
-        <script>
-            $(".bod-picker").nepaliDatePicker({
-                dateFormat: "%d %M, %y",
-                closeOnDateSelect: true
-            });
-
-            $("#clear-bth").on("click", function(event) {
-                $(".bod-picker").val('');
-            });
-        </script>
 </body>
 
 </html>

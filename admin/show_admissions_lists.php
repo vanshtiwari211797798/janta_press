@@ -139,7 +139,7 @@ include("DB.php");
 <body>
 <div id="google_translate_element"></div>
     <div class="container">
-        <a href="Dashboard.php" class="btn btn-back">Back</a>
+        <a href="student-Management.php" class="btn btn-back">Back</a>
         <h2>Student Admissions</h2>
         <div class="table-container">
             <table>

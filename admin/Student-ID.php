@@ -189,16 +189,7 @@ $data = mysqli_query($conn, $sql);
                     </div>
                     <div class="form-group">
                         <label for="section">Section</label>
-                        <select id="section" name="section">
-                            <option value="">Select</option>
-                            <?php
-                            $sections = range('A', 'F'); // A se F tak array create kar raha hai
-                            foreach ($sections as $sec) {
-                                echo "<option value=\"$sec\" " . ($section == $sec ? "selected" : "") . ">$sec</option>";
-                            }
-                            ?>
-
-                        </select>
+                        <input type="text" name="section" id="section" value="<?=$section?>">
                     </div>
 
                     <div class="form-actions">

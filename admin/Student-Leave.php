@@ -106,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="//code.jquery.com/jquery-3.7.1.slim.min.js"></script>
     <script src="//unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
     <link rel="stylesheet" href="//unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
-        <!-- Google Translate Script -->
-        <script type="text/javascript">
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                     pageLanguage: 'en',
@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-<div id="google_translate_element"></div>
+    <div id="google_translate_element"></div>
     <div id="nav">
         <a href='Dashboard.php'><img id="logo" src="janta_logo.jpeg" alt=""></a>
         <a href="index.php">
@@ -284,18 +284,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="class">Class</label>
                         <select id="class" name="class">
                             <option value="">Select Class</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
+                            <?php
+                            $fetchClass = "SELECT * FROM addclass WHERE school_id='$schoolId'";
+                            $classData = mysqli_query($conn, $fetchClass);
+                            if (mysqli_num_rows($classData) > 0) {
+                                while ($resClass = mysqli_fetch_assoc($classData)) {
+
+
+                            ?>
+                                    <option value="<?= $resClass['class'] ?>"><?= $resClass['class'] ?></option>
+
+                            <?php
+
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -310,12 +313,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="section">Section</label>
                         <select id="section" name="section">
                             <option value="">Select</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                            <option value="E">E</option>
-                            <option value="F">F</option>
+                            <?php
+                            $fetchClass = "SELECT * FROM addsection WHERE school_id='$schoolId'";
+                            $classData = mysqli_query($conn, $fetchClass);
+                            if (mysqli_num_rows($classData) > 0) {
+                                while ($resClass = mysqli_fetch_assoc($classData)) {
+
+
+                            ?>
+                                    <option value="<?= $resClass['section'] ?>"><?= $resClass['section'] ?></option>
+
+                            <?php
+
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -324,12 +336,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="leave-from">Leave From</label>
-                        <input type="text" style="cursor:pointer" id="leave-from" name="leave_from" class="bod-picker" placeholder="Select leave from date">
+                        <input type="text" style="cursor:pointer" id="myDate" name="leave_from" class="bod-picker" placeholder="YYYY-MM-DD">
                     </div>
+                    <script>
+                        const dateInput = document.getElementById("myDate");
+
+                        dateInput.addEventListener("input", function(e) {
+                            let value = this.value.replace(/[^0-9]/g, ""); // Remove non-numeric
+                            if (value.length > 4) {
+                                value = value.slice(0, 4) + "-" + value.slice(4);
+                            }
+                            if (value.length > 7) {
+                                value = value.slice(0, 7) + "-" + value.slice(7, 9);
+                            }
+                            this.value = value;
+                        });
+                    </script>
                     <div class="form-group">
                         <label for="leave-to">Leave To</label>
-                        <input type="text" style="cursor: pointer;" id="leave-to" name="leave_to" class="bod-picker" placeholder="Select leave to date">
+                        <input type="text" style="cursor: pointer;" id="myDate2" name="leave_to" class="bod-picker" placeholder="YYYY-MM-DD">
                     </div>
+                    <script>
+                        (() => {
+                            const dateInput = document.getElementById("myDate2");
+
+                            dateInput.addEventListener("input", function(e) {
+                                let value = this.value.replace(/[^0-9]/g, ""); // Remove non-numeric
+                                if (value.length > 4) {
+                                    value = value.slice(0, 4) + "-" + value.slice(4);
+                                }
+                                if (value.length > 7) {
+                                    value = value.slice(0, 7) + "-" + value.slice(7, 9);
+                                }
+                                this.value = value;
+                            });
+                        })()
+                    </script>
                 </div>
 
                 <!-- Row 5 -->
@@ -372,16 +414,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
     <script src="script.js"></script>
-    <script>
-        $(".bod-picker").nepaliDatePicker({
-            dateFormat: "%d %M, %y",
-            closeOnDateSelect: true
-        });
-
-        $("#clear-bth").on("click", function(event) {
-            $(".bod-picker").val('');
-        });
-    </script>
 </body>
 
 </html>

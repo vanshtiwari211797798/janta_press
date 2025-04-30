@@ -54,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="//unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.js"></script>
     <link rel="stylesheet" href="//unpkg.com/nepali-date-picker@2.0.2/dist/nepaliDatePicker.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
-        <!-- Google Translate Script -->
-        <script type="text/javascript">
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                     pageLanguage: 'en',
@@ -75,12 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 select.value = "ne";
                 select.dispatchEvent(new Event("change"));
             } else {
-                setTimeout(setNepaliLanguage, 1000); 
+                setTimeout(setNepaliLanguage, 1000);
             }
         }
         setTimeout(setNepaliLanguage, 3000);
     </script>
-    
+
     <style>
         * {
             margin: 0;
@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-<div id="google_translate_element"></div>
+    <div id="google_translate_element"></div>
     <div class="container">
         <h2>Student Admission Form</h2>
         <form action="" method="POST" enctype="multipart/form-data">
@@ -182,8 +182,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="form-group">
                 <label for="dob">Date of Birth</label>
-                <input type="text" style="cursor: pointer;" class="bod-picker" placeholder="Select Date of Birth" id="dob" name="dob" required>
+                <input type="text" style="cursor: pointer;"  placeholder="YYYY-MM-DD" id="myDate" name="dob" required>
             </div>
+            <script>
+                    const dateInput = document.getElementById("myDate");
+
+                    dateInput.addEventListener("input", function(e) {
+                        let value = this.value.replace(/[^0-9]/g, ""); // Remove non-numeric
+                        if (value.length > 4) {
+                            value = value.slice(0, 4) + "-" + value.slice(4);
+                        }
+                        if (value.length > 7) {
+                            value = value.slice(0, 7) + "-" + value.slice(7, 9);
+                        }
+                        this.value = value;
+                    });
+                </script>
 
             <div class="form-group">
                 <label for="gender">Gender</label>
@@ -197,26 +211,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="form-group">
                 <label for="class">Class</label>
-                <select id="class" name="class" required>
-                    <option value="">Select Class</option>
-                    <script>
-                        for (let i = 1; i <= 12; i++) {
-                            document.write(`<option value="${i}">${i}</option>`);
+                <select id="section" name="class">
+                    <option value="">Select</option>
+                    <?php
+                    $fetchClass = "SELECT class FROM addclass WHERE school_id='$school_id'";
+                    $classList = mysqli_query($conn, $fetchClass);
+                    if (mysqli_num_rows($classList) > 0) {
+                        while ($classData = mysqli_fetch_assoc($classList)) {
+
+
+                    ?>
+                            <option value="<?= $classData['class'] ?>"><?= $classData['class'] ?></option>
+                    <?php
                         }
-                    </script>
+                    } else {
+                        echo "<option value=''>Please enter class by admin panel</option>";
+                    }
+                    ?>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="section">Section</label>
-                <select id="section" name="section" required>
-                    <option value="">Select Section</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
+                <select id="section" name="section">
+                    <option value="">Select</option>
+                    <?php
+                    $fetchClass = "SELECT section FROM addsection WHERE school_id='$school_id'";
+                    $classList = mysqli_query($conn, $fetchClass);
+                    if (mysqli_num_rows($classList) > 0) {
+                        while ($classData = mysqli_fetch_assoc($classList)) {
+
+
+                    ?>
+                            <option value="<?= $classData['section'] ?>"><?= $classData['section'] ?></option>
+                    <?php
+                        }
+                    } else {
+                        echo "<option value=''>Please enter class by admin panel</option>";
+                    }
+                    ?>
                 </select>
             </div>
 
@@ -304,19 +337,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         // nepali calender code here
-        $(".bod-picker").nepaliDatePicker({
-            dateFormat: "%d %M, %y",
-            closeOnDateSelect: true
-        });
-
-        $("#clear-bth").on("click", function(event) {
-            $(".bod-picker").val('');
-        });
-
-        
     </script>
 
-    
+
 
 </body>
 

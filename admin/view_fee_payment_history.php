@@ -197,33 +197,11 @@ $data = mysqli_query($conn, $sql);
                     </div>
                     <div class="form-group">
                         <label for="class">Class</label>
-                        <select id="class" name="class">
-                            <option>Select Class</option>
-                            <option value="1" <?= $class == "1" ? "selected" : "" ?>>Class 1</option>
-                            <option value="2" <?= $class == "2" ? "selected" : "" ?>>Class 2</option>
-                            <option value="3" <?= $class == "3" ? "selected" : "" ?>>Class 3</option>
-                            <option value="4" <?= $class == "4" ? "selected" : "" ?>>Class 4</option>
-                            <option value="5" <?= $class == "5" ? "selected" : "" ?>>Class 5</option>
-                            <option value="6" <?= $class == "6" ? "selected" : "" ?>>Class 6</option>
-                            <option value="7" <?= $class == "7" ? "selected" : "" ?>>Class 7</option>
-                            <option value="8" <?= $class == "8" ? "selected" : "" ?>>Class 8</option>
-                            <option value="9" <?= $class == "9" ? "selected" : "" ?>>Class 9</option>
-                            <option value="10" <?= $class == "10" ? "selected" : "" ?>>Class 10</option>
-                            <option value="11" <?= $class == "11" ? "selected" : "" ?>>Class 11</option>
-                            <option value="12" <?= $class == "12" ? "selected" : "" ?>>Class 12</option>
-                        </select>
+                        <input type="text" name="class" id="class" value="<?=$class?>">
                     </div>
                     <div class="form-group">
                         <label for="section">Section</label>
-                        <select id="section" name="section">
-                            <option>Select</option>
-                            <option value="A" <?= $section == "A" ? "selected" : "" ?>>A</option>
-                            <option value="B" <?= $section == "B" ? "selected" : "" ?>>B</option>
-                            <option value="C" <?= $section == "C" ? "selected" : "" ?>>C</option>
-                            <option value="D" <?= $section == "D" ? "selected" : "" ?>>D</option>
-                            <option value="E" <?= $section == "E" ? "selected" : "" ?>>E</option>
-                            <option value="F" <?= $section == "F" ? "selected" : "" ?>>F</option>
-                        </select>
+                        <input type="text" name="section" id="section" value="<?=$section?>">
                     </div>
                     <div class="form-actions">
                         <button type="submit">Search</button>
