@@ -269,12 +269,20 @@ include('phpqrcode/qrlib.php');
             cardDiv.style.width = widthInPx + 'px';
             cardDiv.style.height = heightInPx + 'px';
 
-            // Process card background
-            const background = templateData[side]?.background ? `url(${templateData[side].background})` : null;
-            cardDiv.style.backgroundImage = background || 'none';
-            cardDiv.style.backgroundSize = 'cover';
-            cardDiv.style.backgroundRepeat = 'no-repeat';
-            cardDiv.style.backgroundPosition = 'center';
+            // Process card background - now using an img element for better quality
+            if (templateData[side]?.background) {
+                const bgImg = document.createElement('img');
+                bgImg.className = 'id-card-bg';
+                bgImg.src = templateData[side].background;
+                bgImg.style.position = 'absolute';
+                bgImg.style.top = '0';
+                bgImg.style.left = '0';
+                bgImg.style.width = '100%';
+                bgImg.style.height = '100%';
+                bgImg.style.objectFit = 'cover';
+                bgImg.style.zIndex = '0';
+                cardDiv.appendChild(bgImg);
+            }
 
             let imageCount = 0;
 
@@ -292,7 +300,7 @@ include('phpqrcode/qrlib.php');
                     textDiv.style.position = 'absolute';
                     textDiv.style.top = (element.position.top + 2) + 'px';
                     textDiv.style.height = element.position.height + 'px';
-                    textDiv.style.width = (element.position.width = 0) + 'px';
+                    textDiv.style.width = element.position.width + 'px';
                     textDiv.style.fontFamily = element.styles['font-family'];
                     textDiv.style.fontSize = element.styles['font-size'];
                     textDiv.style.color = element.styles.color;
@@ -313,7 +321,6 @@ include('phpqrcode/qrlib.php');
                     const textWidth = tempSpan.offsetWidth;
                     document.body.removeChild(tempSpan);
 
-                    // Replace the text width measurement code with this:
                     if (element.styles['text-align'] === 'center') {
                         textDiv.style.width = element.position.width + 'px';
                         textDiv.style.left = element.position.left + 'px';
@@ -348,7 +355,6 @@ include('phpqrcode/qrlib.php');
                             const img = document.createElement('img');
                             img.className = 'uploaded-image';
                             img.src = imgSrc;
-
                             img.style.width = '100%';
                             img.style.height = '100%';
                             img.style.objectFit = 'cover';
@@ -374,17 +380,14 @@ include('phpqrcode/qrlib.php');
                         const qrImg = document.createElement('img');
                         qrImg.className = 'qr-code';
                         qrImg.src = qrCodeUrl;
-
                         qrImg.style.width = '100%';
                         qrImg.style.height = '100%';
                         qrImg.style.objectFit = 'cover';
 
                         qrContainer.appendChild(qrImg);
                         cardDiv.appendChild(qrContainer);
-                    } else {
+                    } else if (element.content) {
                         // For other images (if any)
-                        const imgSrc = element.content;
-
                         const imgContainer = document.createElement('div');
                         imgContainer.className = 'image-container';
 
@@ -398,8 +401,7 @@ include('phpqrcode/qrlib.php');
 
                         const img = document.createElement('img');
                         img.className = 'uploaded-image';
-                        img.src = imgSrc;
-
+                        img.src = element.content;
                         img.style.width = '100%';
                         img.style.height = '100%';
                         img.style.objectFit = 'cover';
