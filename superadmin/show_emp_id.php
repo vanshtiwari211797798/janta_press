@@ -298,7 +298,7 @@ include('phpqrcode/qrlib.php');
                     textDiv.style.position = 'absolute';
                     textDiv.style.top = (element.position.top + 2) + 'px';
                     textDiv.style.height = element.position.height + 'px';
-                    textDiv.style.width = element.position.width + 'px';
+                    textDiv.style.width = element.position.width = 0 + 'px';
                     textDiv.style.fontFamily = element.styles['font-family'];
                     textDiv.style.fontSize = element.styles['font-size'];
                     textDiv.style.color = element.styles.color;
